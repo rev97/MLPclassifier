@@ -28,10 +28,16 @@ class MLPmodel:
 
         expected_y  = y_test
         predicted_y = model.predict(X_test)
+        accuracy_score = model.score(X_test, predicted_y, sample_weight=None)
         X_test['expected_y'] = expected_y
         X_test['predicted_y'] = predicted_y
 
-        return X_test
+        
+
+        print(metrics.classification_report(expected_y, predicted_y))
+        print(metrics.confusion_matrix(expected_y, predicted_y))
+
+        return X_test, accuracy_score
 
 if __name__ == '__main__':
     df = create_dataset('/Users/revanthgottuparthy/Desktop/ABC/MLPclassifier/input_data.csv')
@@ -41,5 +47,6 @@ if __name__ == '__main__':
     target = 'Violation'
     test_size = 0.30
     X_train, X_test, y_train, y_test = mlp_obj.split_data(x_col, target, test_size)
-    res = mlp_obj.model(X_train, X_test, y_train, y_test)
+    res, accuracy_score = mlp_obj.model(X_train, X_test, y_train, y_test)
+    print(accuracy_score)
     res.to_csv('/Users/revanthgottuparthy/Desktop/ABC/MLPclassifier/output_data.csv')
